@@ -1,4 +1,3 @@
-
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +6,8 @@
 #include <errno.h>
 #include <string.h>
 
-
-static pthread_mutex_t baguette[N];
+const int N =  8;
+pthread_mutex_t baguette[N];
 
 
 void error(int err, char *msg) {
@@ -45,7 +44,7 @@ void* philosophe ( void* arg )
 
 int main ( int argc, char *argv[])
 {
-    int N = atoi(argv[1]);
+    //int N = atoi(argv[1]);
     int i;
     int id[N];
     int err;
