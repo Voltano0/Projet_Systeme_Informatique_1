@@ -93,14 +93,14 @@ int main(int argc, char const *argv[])
         if(0 != pthread_create(&ProdThreads[i],NULL,&producer,NULL)){
             printf("ERROR: Error while creating producter thread n°%ld",i);
         }
-        else printf("Producter Thread %ld created\n",i+1);
+        //else printf("Producter Thread %ld created\n",i+1);
     }
     for (size_t i = 0; i < nconsom; i++)
     {
         if(0 != pthread_create(&ConsThreads[i],NULL,&consumer,NULL)){
             printf("ERROR: Error while creating consumer thread n°%ld\n",i);
         }
-        else printf("Consumer Thread %ld created\n",i+1);
+        //else printf("Consumer Thread %ld created\n",i+1);
     }
     for (size_t i = 0; i < nproduct; i++)
     {
@@ -108,8 +108,8 @@ int main(int argc, char const *argv[])
             printf("ERROR: Error while joining producter thread n°%ld\n",i);
         }
     }
-    printf("%d items producted\n",nprod);
+    //printf("%d items producted\n",nprod);
     while(nprod2 > 0);
-    printf("%d items consumed\n",8192-nprod2);
+    //printf("%d items consumed\n",8192-nprod2);
     return 0;
 }
