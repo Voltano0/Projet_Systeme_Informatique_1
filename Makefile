@@ -1,4 +1,5 @@
 make:
+	mkdir -p temp
 	#gcc  -o temp/Philosof Philosof.c -lpthread
 	gcc  -o temp/WriterReader WriterReader.c -lpthread    
 	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
