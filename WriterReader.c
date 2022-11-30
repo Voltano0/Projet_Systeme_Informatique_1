@@ -122,14 +122,7 @@ int main(int argc, char const *argv[]){
             printf("ERROR: Error while joining reader thread n°%ld\n",i);
         }
     }
-    printf("%d writing\n",writing);
-    printf("%d reading\n",reading);
+    //printf("%d writing\n",writing);
+    //printf("%d reading\n",reading);
     return 0;
 }
-
-
-
-
-
-
-

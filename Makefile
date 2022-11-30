@@ -1,7 +1,7 @@
 make:
 	#gcc  -o bin/Philosof Philosof.c -lpthread
 	gcc  -o bin/WriterReader WriterReader.c -lpthread    
-	gcc  -o bin/Producter_Consumer Producter_Consumer.c -lpthread    
+	gcc  -o bin/Producer_Consumer Producer_Consumer.c -lpthread    
 clean:
 	rm -f bin/*
 
