@@ -17,6 +17,7 @@ for prog in df['Program'].unique():
     plt.clf()
     plt.boxplot(RawTimes, labels=Nthreads,showmeans=True)
     #plt.errorbar(Nthreads, MeanTimes, yerr=StdTimes, fmt='o')
+    plt.ylim(ymin=0)
     plt.xlabel('Number of threads')
     plt.ylabel('Time (ms)')
     plt.title(prog)
