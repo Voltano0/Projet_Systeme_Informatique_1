@@ -6,9 +6,9 @@
 #include <errno.h>
 #include <string.h>
 
-const int N =  8;
-pthread_mutex_t baguette[N];
-
+int numberOfPhilo;
+pthread_mutex_t *baguette; 
+pthread_t *phil;
 
 void error(int err, char *msg) {
   fprintf(stderr,"%s a retourné %d message d'erreur : %s\n",msg,err,strerror(errno));
@@ -18,13 +18,14 @@ void error(int err, char *msg) {
 void mange(int id) {printf("Philosophe [%d] mange\n",id);}
 
 
-void* philosophe ( void* arg )
+void* philosophe ( void* arg)
 {
-  int *id=(int *) arg;
-  int left = *id;
-  int right = (left + 1) % N;
-  for (int i = 0; i < 100000; i++)
-   {
+  int* i = (int*) arg;
+  int id = *i;
+  int left = id;
+  int right = (left + 1) % numberOfPhilo;
+  
+  for(int i=0; i<100000; i++){
     // philosophe pense
     if(left<right) {
       pthread_mutex_lock(&baguette[left]);
@@ -34,7 +35,7 @@ void* philosophe ( void* arg )
       pthread_mutex_lock(&baguette[right]);
       pthread_mutex_lock(&baguette[left]);
     }
-    mange(*id);
+    mange(id);
     pthread_mutex_unlock(&baguette[left]);
     pthread_mutex_unlock(&baguette[right]);
   }
@@ -44,34 +45,40 @@ void* philosophe ( void* arg )
 
 int main ( int argc, char *argv[])
 {
-    //int N = atoi(argv[1]);
-    int i;
-    int id[N];
-    int err;
-    pthread_t phil[N];
+  numberOfPhilo = atoi(argv[1]);
+  int id[numberOfPhilo];
+  baguette = (pthread_mutex_t*) malloc(numberOfPhilo*sizeof(pthread_mutex_t));
+  phil = (pthread_t*)malloc(numberOfPhilo*sizeof(pthread_t));
 
-    for (i = 0; i < N; i++)
-        id[i]=i;
+  srand(getpid());
 
-    for (i = 0; i < N; i++) {
-        err=pthread_mutex_init( &baguette[i], NULL);
-        if(err!=0) error(err,"pthread_mutex_init");
-    }
+  for (int i = 0; i < numberOfPhilo; i++)
+    id[i]=i;
 
-    for (i = 0; i < N; i++) {
-        err=pthread_create(&phil[i], NULL, philosophe, (void*)&(id[i]) );
-        if(err!=0) error(err,"pthread_create");
-    }
+  for (int i = 0; i < numberOfPhilo; i++) {
+    int err=pthread_mutex_init(&baguette[i], NULL);
+    
+    if(err!=0) error(err,"pthread_mutex_init");
+  }
 
-    for (i = 0; i < N; i++) {
-        pthread_join(phil[i], NULL);
-        if(err!=0) error(err,"pthread_join");
-    }
+  for (int i = 0; i < numberOfPhilo; i++) {
+    int err=pthread_create(&phil[i], NULL, philosophe,(void*)&(id[i]));
 
-    for (i = 0; i < N; i++) {
-        pthread_mutex_destroy(&baguette[i]);
-        if(err!=0) error(err,"pthread_mutex_destroy");
-    }
+    if(err!=0) error(err,"pthread_create");
+  }
 
-    return (EXIT_SUCCESS);
+  for (int i = 0; i < numberOfPhilo; i++) {
+    int err = pthread_join(phil[i], NULL);
+
+    if(err!=0) error(err,"pthread_join");
+  }
+
+  for (int i = 0; i < numberOfPhilo; i++) {
+    int err = pthread_mutex_destroy(&baguette[i]);
+    if(err!=0) error(err,"pthread_mutex_destroy");
+  }
+  free(baguette);
+  free(phil);
+
+  return (EXIT_SUCCESS);
 }
