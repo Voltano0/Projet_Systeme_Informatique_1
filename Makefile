@@ -6,7 +6,7 @@ make:
 	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
 clean:
 	rm -f temp/*
-
+	rm -f logs/*
 test:
 	make
 	./experiment.sh > temp/output.csv
