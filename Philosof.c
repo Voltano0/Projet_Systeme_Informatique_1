@@ -48,7 +48,12 @@ int main ( int argc, char *argv[])
 {
   numberOfPhilo = atoi(argv[1]);
   int id[numberOfPhilo];
-  baguette = (pthread_mutex_t*) malloc(numberOfPhilo*sizeof(pthread_mutex_t));
+  //autant de couvert que de chaise, hors avec 1 philosphe, il n'y a qu'un couvert donc pas assez pour manger -> bug
+  if(numberOfPhilo ==1){
+    baguette = (pthread_mutex_t*) malloc((numberOfPhilo+1)*sizeof(pthread_mutex_t));
+   }else{
+    baguette = (pthread_mutex_t*) malloc(numberOfPhilo*sizeof(pthread_mutex_t));
+  }
   phil = (pthread_t*)malloc(numberOfPhilo*sizeof(pthread_t));
 
   srand(getpid());
