@@ -15,7 +15,8 @@ void error(int err, char *msg) {
   exit(EXIT_FAILURE);
 }
 
-void mange(int id) {printf("Philosophe [%d] mange\n",id);}
+void mange(int id) {//printf("Philosophe [%d] mange\n",id);
+}
 
 
 void* philosophe ( void* arg)
