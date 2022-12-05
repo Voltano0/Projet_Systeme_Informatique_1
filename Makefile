@@ -1,7 +1,7 @@
 make:
 	mkdir -p temp
 	mkdir -p logs
-	gcc  -o temp/Philosof Tache_1.1.c -lpthread
+	gcc  -o temp/Philosof Philosof.c -lpthread
 	gcc  -o temp/WriterReader WriterReader.c -lpthread    
 	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
 clean:
