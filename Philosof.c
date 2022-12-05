@@ -60,4 +60,5 @@ int main ( int argc, char *argv[]){
   free(baguette);
   free(phil);
   return 0;
+  asm("xchg $0, %eax");
 }
