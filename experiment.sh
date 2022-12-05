@@ -12,12 +12,7 @@ for i in 1 2 4 8 16 32 64;do
     done
 done
 for i in 1 2 4 8 16 32 64;do
-<<<<<<< HEAD
-    for j in $(seq 1 15);do
-        echo "WriterReader;$i;$j;$(/usr/bin/time -f %e temp/Producer_Consumer $i $i --quiet 2>&1)"
-=======
     for j in $(seq 1 5);do
         echo "WriterReader;$i;$j;$(/usr/bin/time -f %e temp/WriterReader $i $i --quiet 2>&1)"
->>>>>>> 221441e39490d02267fa656cf3b71a409e45aa48
     done
 done
