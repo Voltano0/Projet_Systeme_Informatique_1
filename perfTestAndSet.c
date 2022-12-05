@@ -14,16 +14,19 @@ void lock(){
         "xchgl %%eax, %0;"
         "testl %%eax, %%eax;"
         "jnz 1b; "
-        : "=r" (lockAllThread)
-        :: "eax");
+        : "=m" (lockAllThread)
+        :
+        : "eax"
+        );
 };
 
 void unlock(){
     //implement spinlock unlock with inline assempbly
     __asm(
         "movl $0, %0 ;"
-        : "=r" (lockAllThread)
-        :: "eax");
+        : "=m" (lockAllThread)
+        :: "eax"
+        );
     }
 
 int main(int argc, char const *argv[])
