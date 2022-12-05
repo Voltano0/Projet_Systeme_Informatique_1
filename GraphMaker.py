@@ -19,6 +19,6 @@ for prog in df['Program'].unique():
     #plt.errorbar(Nthreads, MeanTimes, yerr=StdTimes, fmt='o')
     plt.ylim(ymin=0)
     plt.xlabel('Number of threads')
-    plt.ylabel('Time (ms)')
+    plt.ylabel('Time (s)')
     plt.title(prog)
     plt.savefig(f'temp/{prog}.png')
