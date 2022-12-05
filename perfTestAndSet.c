@@ -9,24 +9,21 @@ int lockAllThread = 0;
 void lock(){
     //implement spinlock with inline assempbly
     __asm(
-        "1: ;"
-        "movl $1, %%eax ;"
-        "xchgl %%eax, %0 ;"
-        "testl %%eax, %%eax ;"
-        "jnz 1b ;"
-        : "=m" (lockAllThread)
-        :: "eax"
-    );
-    printf("%d", lockAllThread);
+        "1:"
+        "movl $1, %%eax;"
+        "xchgl %%eax, %0;"
+        "testl %%eax, %%eax;"
+        "jnz 1b; "
+        : "=r" (lockAllThread)
+        :: "eax");
 };
 
 void unlock(){
     //implement spinlock unlock with inline assempbly
     __asm(
         "movl $0, %0 ;"
-        : "=m" (lockAllThread)
-        :: "eax"
-    );
+        : "=r" (lockAllThread)
+        :: "eax");
     }
 
 int main(int argc, char const *argv[])
