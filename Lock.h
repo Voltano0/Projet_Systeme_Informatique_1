@@ -1,4 +1,3 @@
-//implement spinlock with inline assembly
 void lock(int* locker){
     __asm(
         "1:"
@@ -6,14 +5,15 @@ void lock(int* locker){
         "xchgl %%eax, %0;"
         "testl %%eax, %%eax;"
         "jnz 1b;"
-        : "=m" (locker)
+        : "=m" (*locker)
         :
         : "eax"
-        );};
+        );
+};
 void unlock(int* locker){
     __asm(
         "movl $0, %0 ;"
-        : "=m" (locker)
+        : "=m" (*locker)
         :: "eax"
         );
 };
