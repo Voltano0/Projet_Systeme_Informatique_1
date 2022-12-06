@@ -1,11 +1,11 @@
 make:
 	mkdir -p temp
 	mkdir -p logs
-	gcc  -o temp/Philosof Philosof.c -lpthread
-	gcc  -o temp/WriterReader WriterReader.c -lpthread    
-	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
-	gcc  -o temp/Perftest test_and_set.c -lpthread
-	gcc  -o temp/Perftest2 test_and_test_and_set.c -lpthread
+	gcc  -o temp/Philosof src/Philosof.c -lpthread
+	gcc  -o temp/WriterReader src/WriterReader.c -lpthread    
+	gcc  -o temp/Producer_Consumer src/Producer_Consumer.c -lpthread    
+	gcc  -o temp/Perftest src/test_and_set.c -lpthread
+	gcc  -o temp/Perftest2 src/test_and_test_and_set.c -lpthread
 clean:
 	rm -f temp/*
 	rm -f logs/*

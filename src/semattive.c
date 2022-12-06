@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <malloc.h>
 #include <unistd.h>
-#include "custom_sema_t.h"
+#include "../headers/custom_sema_t.h"
 #include "test_and_test_and_set.c"
 
 

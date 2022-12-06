@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "Lock2.h"
+#include "../headers/Lock.h"
 int numberOfOccur; 
 
 void* sectionCrit(void* arg){
