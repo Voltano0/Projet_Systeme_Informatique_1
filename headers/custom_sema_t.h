@@ -1,4 +1,4 @@
 typedef struct custom_sema_t {
     int value;
-    int *lock;
+    int *locker;
 } custom_sema_t;
