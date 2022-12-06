@@ -8,7 +8,6 @@ int numberOfOccur;
 int lockAllThread = 0;
 
 void lock(){
-    //implement spinlock with inline assempbly
     __asm(
         "1:"
         "movl $1, %%eax;"
@@ -22,7 +21,6 @@ void lock(){
 };
 
 void unlock(){
-    //implement spinlock unlock wit#include "spinLock.c"h inline assempbly
     __asm(
         "movl $0, %0 ;"
         : "=m" (lockAllThread)
