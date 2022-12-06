@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Read the data
 df = pd.read_csv('temp/output.csv',sep=";")
 #plot the data for Producer_Consumer
-for prog in df['Program'].unique():
+for prog in df['Program'].unique()[:3]:
     newdf = df[df['Program'] == prog]
     MeanTimes = []
     StdTimes = []
@@ -34,8 +34,8 @@ for prog in df['Program'].unique()[3:5]:
         MeanTimes.append(newdf[newdf['Threads'] == i]['Temps'].mean())
         StdTimes.append(newdf[newdf['Threads'] == i]['Temps'].std())
     #plt.boxplot(RawTimes, labels=Nthreads,showmeans=True)
-    #plt.errorbar(Nthreads, MeanTimes, yerr=StdTimes, fmt='o')
-    plt.plot(Nthreads, MeanTimes,marker='o',label=prog)
+    plt.errorbar(Nthreads, MeanTimes, yerr=StdTimes, fmt='o',label=prog)
+    #plt.plot(Nthreads, MeanTimes,marker='o',label=prog)
 plt.ylim(ymin=0)
 plt.xticks(Nthreads)
 plt.xlabel('Number of threads')
