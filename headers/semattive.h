@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <malloc.h>
 #include <unistd.h>
-#include "../headers/custom_sema_t.h"
-#include "test_and_test_and_set.c"
+#include "custom_sema_t.h"
+#include "../src/test_and_test_and_set.c"
 
 
 void init(custom_sema_t *custom_sem, int initial_value){
