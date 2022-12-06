@@ -4,12 +4,13 @@ make:
 	gcc  -o temp/Philosof Philosof.c -lpthread
 	gcc  -o temp/WriterReader WriterReader.c -lpthread    
 	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
+	gcc  -o temp/Perftest perftest.c -lpthread
 clean:
 	rm -f temp/*
 	rm -f logs/*
 test:
 	make
-	./experiment.sh > temp/output.csv
+	./experiments.sh > temp/output.csv
 	python3 GraphMaker.py
 testMemory:
 	make
