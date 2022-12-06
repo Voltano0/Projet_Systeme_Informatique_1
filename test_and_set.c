@@ -3,9 +3,32 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "spinLock.c"
 
 int numberOfOccur; 
+int lockAllThread = 0;
+
+void lock(){
+    //implement spinlock with inline assempbly
+    __asm(
+        "1:"
+        "movl $1, %%eax;"
+        "xchgl %%eax, %0;"
+        "testl %%eax, %%eax;"
+        "jnz 1b; "
+        : "=m" (lockAllThread)
+        :
+        : "eax"
+        );
+};
+
+void unlock(){
+    //implement spinlock unlock wit#include "spinLock.c"h inline assempbly
+    __asm(
+        "movl $0, %0 ;"
+        : "=m" (lockAllThread)
+        :: "eax"
+        );
+};
 
 void* sectionCrit(){
     for(int i = 0; i < numberOfOccur; i++)
@@ -16,6 +39,7 @@ void* sectionCrit(){
     }
     
 };
+
 int main(int argc, char const *argv[])
 {
     int N = atoi(argv[1]);
