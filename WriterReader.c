@@ -2,6 +2,8 @@
 #include<semaphore.h>
 #include<stdlib.h>
 #include<stdio.h>
+
+
 pthread_mutex_t mutex_reader;
 pthread_mutex_t mutex_writer;
 pthread_mutex_t z;// Pour être sure que les writer aient tjrs la prioritée
