@@ -3,13 +3,14 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
-#include "Lock.h"
+#include "../headers/Lock2.h"
 int numberOfOccur; 
 
 void* sectionCrit(void* arg){
     int * locker = (int*)arg;
     for(int i = 0; i < numberOfOccur; i++)
     {
+        
         lock(locker);
         for (int i=0; i<10000; i++);
         unlock(locker);

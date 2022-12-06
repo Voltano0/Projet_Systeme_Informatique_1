@@ -11,6 +11,7 @@ void lock(int* locker){
         : "eax"
         );
 };
+
 void unlock(int* locker){
     __asm(
         "movl $0, %0 ;"
