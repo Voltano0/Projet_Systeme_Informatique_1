@@ -16,12 +16,8 @@ void lock(){
         "jnz 1b; "
         : "=m" (lockAllThread)
         :
-<<<<<<< HEAD
-        : "eax");
-=======
         : "eax"
         );
->>>>>>> 777bae87489626458bbff37800bae72d34069e75
 };
 
 void unlock(){
@@ -29,13 +25,8 @@ void unlock(){
     __asm(
         "movl $0, %0 ;"
         : "=m" (lockAllThread)
-<<<<<<< HEAD
-        :
-        : "eax");
-=======
         :: "eax"
         );
->>>>>>> 777bae87489626458bbff37800bae72d34069e75
     }
 
 int main(int argc, char const *argv[])
