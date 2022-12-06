@@ -2,13 +2,12 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<stdbool.h>
-#include<semaphore.h>
-
+#include"../headers/semative.h"
 #define N 8 // places dans le buffer
 int buffer[N];
-pthread_mutex_t mutex;
-sem_t empty;
-sem_t full;
+int* mutex = 0;
+custom_sema_t empty;
+custom_sema_t full;
 int head = 0;
 int nprod = 0;
 int nprod2 = 8192;
@@ -40,8 +39,8 @@ void* producer()
   bool run = true;
   while(run)
   {
-    sem_wait(&empty); // attente d'une place libre
-    pthread_mutex_lock(&mutex);
+    wait(&empty); // attente d'une place libre
+    lock(&mutex);
         if(nprod < 8192){
         ins(item);
         nprod++;
@@ -49,8 +48,8 @@ void* producer()
         else {
             run = false;
         }
-    pthread_mutex_unlock(&mutex);
-    sem_post(&full); // il y a une place remplie en plus
+    unlock(&mutex);
+    post(&full); // il y a une place remplie en plus
     }
  }
 
@@ -61,8 +60,8 @@ void* consumer()
  bool run = true;
  while(run)
  {
-   sem_wait(&full); // attente d'une place remplie
-   pthread_mutex_lock(&mutex);
+   wait(&full); // attente d'une place remplie
+   lock(&mutex);
     if(nprod2 > 0){
         item = rem();
         nprod2--;
@@ -70,8 +69,8 @@ void* consumer()
         else {
             run = false;
         }
-   pthread_mutex_unlock(&mutex);
-   sem_post(&empty); // il y a une place libre en plus
+   unlock(&mutex);
+   post(&empty); // il y a une place libre en plus
    for (int i=0; i<10000; i++);
  }
 }
@@ -80,7 +79,8 @@ int main(int argc, char const *argv[])
 {
     int nproduct;
     int nconsom;
-    pthread_mutex_init(&mutex, NULL);
+    &mutex = malloc(sizeof(int));
+    mutex = 0;
     sem_init(&empty, 0 , N);
     sem_init(&full, 0 , 0); 
     sscanf(argv[1], "%d", &nproduct);

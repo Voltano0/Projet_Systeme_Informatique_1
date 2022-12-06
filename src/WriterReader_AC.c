@@ -2,13 +2,13 @@
 #include<semaphore.h>
 #include<stdlib.h>
 #include<stdio.h>
+#include"../headers/semative.h"
 
-
-pthread_mutex_t mutex_reader;
-pthread_mutex_t mutex_writer;
-pthread_mutex_t z;// Pour être sure que les writer aient tjrs la prioritée
-sem_t db_reader; // accès à la db
-sem_t db_writer; // accès à la db
+int* mutex_reader;
+int* mutex_writer;
+int* z;// Pour être sure que les writer aient tjrs la prioritée
+custom_sema_t* db_reader; // accès à la db
+custom_sema_t* db_writer; // accès à la db
 int writercount = 0;
 int readcount=0; // nombre de readers
 int reading = 0;
@@ -25,14 +25,14 @@ void* writer(){
     int run = 1;
 while(run)
     {
-    pthread_mutex_lock(&mutex_writer);
+    lock(mutex_writer);
     writercount ++;
     if(writercount == 1){
-        sem_wait(&db_reader);
+        wait(db_reader);
     }
-    pthread_mutex_unlock(&mutex_writer);
+    unlock(mutex_writer);
     
-    sem_wait(&db_writer);
+    wait(db_writer);
 
     // section critique, un seul writer à la fois
     if(writing < 2560){
@@ -42,14 +42,14 @@ while(run)
     else{
         run = 0;
     }
-    sem_post(&db_writer);
+    post(db_writer);
 
-    pthread_mutex_lock(&mutex_writer);
+    lock(mutex_writer);
     writercount --;
     if(writercount == 0){
-        sem_post(&db_reader);
+        post(db_reader);
     }
-    pthread_mutex_unlock(&mutex_writer);
+    unlock(mutex_writer);
     }
 }
 
@@ -58,32 +58,32 @@ void* reader()
     int run = 1;
     while(run)
     {
-        pthread_mutex_lock(&z);
-        sem_wait(&db_reader);
-        pthread_mutex_lock(&mutex_reader);
+        lock(z);
+        wait(db_reader);
+        lock(mutex_reader);
         // section critique
         readcount++;
         if (readcount==1)
         { // arrivée du premier reader
-            sem_wait(&db_writer);
+            wait(db_writer);
         }
-        pthread_mutex_unlock(&mutex_reader);
-        sem_post(&db_reader);
-        pthread_mutex_lock(&mutex_reader);
+        unlock(mutex_reader);
+        post(db_reader);
+        lock(mutex_reader);
         if(reading < 640){
             read_database();
             reading ++;
             readcount--;
             if(readcount==0)
             { // départ du dernier reader
-                sem_post(&db_writer);
+                post(db_writer);
             }
         }
         else{
             run = 0;
         }
-        pthread_mutex_unlock(&mutex_reader);
-        pthread_mutex_unlock(&z);
+        unlock(mutex_reader);
+        unlock(z);
         }
 }
 
@@ -92,8 +92,8 @@ int main(int argc, char const *argv[]){
     int nwriter;
     sscanf(argv[2], "%d", &nreader);
     sscanf(argv[1], "%d", &nwriter);
-    sem_init(&db_reader, 0, 1);
-    sem_init(&db_writer, 0, 1);
+    init(db_reader, 1);
+    init(db_writer, 1);
     pthread_t ReadThreads[nreader];
     pthread_t WriteThreads[nwriter];
     for (size_t i = 0; i < nwriter; i++)

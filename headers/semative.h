@@ -5,13 +5,13 @@
 #include <malloc.h>
 #include <unistd.h>
 #include "custom_sema_t.h"
-#include "../src/test_and_test_and_set.c"
+#include "Lock2.h"
 
 
-void init(custom_sema_t *custom_sem){
+void init(custom_sema_t *custom_sem, int value){
     *(custom_sem -> locker) = 0;
     custom_sem -> locker = (int *) malloc(sizeof(int));
-    custom_sem -> value = 0;
+    custom_sem -> value = value;
 }
 
 void wait(custom_sema_t *custom_sem){
