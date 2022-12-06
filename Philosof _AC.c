@@ -1,4 +1,4 @@
-#include <pthread.h>
+#include"test_and_test_and_set.c"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

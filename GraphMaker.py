@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 
 # Read the data
 df = pd.read_csv('temp/output.csv',sep=";")
-print(df['Program'].unique())
 #plot the data for Producer_Consumer
 for prog in df['Program'].unique()[:3]:
     newdf = df[df['Program'] == prog]
