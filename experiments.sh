@@ -31,3 +31,8 @@ for i in 1 2 4 8 16 32 64;do
         echo "Producer_Consumer;$i;$j;$(/usr/bin/time -f %e temp/Producer_Consumer_AC $i $i --quiet 2>&1)"
     done
 done
+for i in 1 2 4 8 16 32 64;do
+    for j in $(seq 1 5);do
+        echo "Philosof_AC;$i;$j;$(/usr/bin/time -f %e temp/Philosof_AC $i --quiet 2>&1)"
+    done
+done

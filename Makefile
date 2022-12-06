@@ -7,6 +7,7 @@ make:
 	gcc  -o temp/Producer_Consumer_AC src/Producer_Consumer_AC.c -lpthread    
 	gcc  -o temp/Perftest src/test_and_set.c -lpthread
 	gcc  -o temp/Perftest2 src/test_and_test_and_set.c -lpthread
+	gcc  -o temp/Philosof_AC src/Philosof_AC.c -lpthread
 clean:
 	rm -f temp/*
 	rm -f logs/*
@@ -14,6 +15,7 @@ test:
 	make
 	./experiments.sh > temp/output.csv
 	python3 GraphMaker.py
+
 testMemory:
 	make
 	valgrind --log-file="logs/Philosof_valgrind.log" --leak-check=yes temp/Philosof 2
