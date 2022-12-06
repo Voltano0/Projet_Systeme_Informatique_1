@@ -28,12 +28,3 @@ void unlock(){
         :: "eax"
         );
     }
-
-int main(int argc, char const *argv[])
-{
-    int N = atoi(argv[1]);
-    lock();
-    unlock();
-    lock();
-    return 0;
-}
