@@ -31,7 +31,7 @@ int main ( int argc, char *argv[]){
   numberOfPhilo = atoi(argv[1]);
   int id[numberOfPhilo];
   int numberOfPhilo1 = (numberOfPhilo==1) ? numberOfPhilo+1 : numberOfPhilo;
-  pthread_t *phil = (pthread_t *) malloc(numberOfPhilo*sizeof(pthread_t));
+  pthread_t phil[numberOfPhilo];
 
   //create 2 baguettes if there is only one philo
   if (numberOfPhilo == 1){
@@ -58,6 +58,5 @@ int main ( int argc, char *argv[]){
   }
 
   free(baguette);
-  free(phil);
   return 0;
 }
