@@ -12,10 +12,10 @@ void lock(){
     while(lockAllThread == 1){};
     __asm(
         "1:"
-        "movl $1, %%eax;"
+        "movl $1, %%eax;"  
         "xchgl %%eax, %0;"
         "testl %%eax, %%eax;"
-        "jnz 1b; "
+        "jnz 1b;"
         : "=m" (lockAllThread)
         :
         : "eax", "ebx"
