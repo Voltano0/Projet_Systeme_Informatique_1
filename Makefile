@@ -5,6 +5,7 @@ make:
 	gcc  -o temp/WriterReader WriterReader.c -lpthread    
 	gcc  -o temp/Producer_Consumer Producer_Consumer.c -lpthread    
 	gcc  -o temp/Perftest test_and_set.c -lpthread
+	gcc  -o temp/Perftest2 test_and_test_and_set.c -lpthread
 clean:
 	rm -f temp/*
 	rm -f logs/*

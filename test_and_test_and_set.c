@@ -13,11 +13,16 @@ void lock(){
         "1:"
         "movl $1, %%eax;"
         "xchgl %%eax, %0;"
+        "movl %0, %%ebx;"
+        "2:"
+
+            "testl %%ebx,  %%ebx;"
+            "jz 2b;"
         "testl %%eax, %%eax;"
         "jnz 1b; "
         : "=m" (lockAllThread)
         :
-        : "eax"
+        : "eax", "ebx"
         );
 };
 
