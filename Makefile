@@ -10,8 +10,8 @@ make:
 	gcc  -o temp/WriterReader_AC src/WriterReader_AC.c -lpthread 
 	gcc  -o temp/Producer_Consumer_AC src/Producer_Consumer_AC.c -lpthread 
 clean:
-	rm -f temp/*
-	rm -f logs/*
+	rm -f temp/* 
+	rm -f logs/* 
 test:
 	make
 	./experiments.sh > temp/output.csv
