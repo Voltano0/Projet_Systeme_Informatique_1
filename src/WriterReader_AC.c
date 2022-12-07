@@ -144,5 +144,11 @@ int main(int argc, char const *argv[]){
     }
     //printf("%d writing\n",writing);
     //printf("%d reading\n",reading);
+    free(mutex_reader);
+    free(mutex_writer);
+    free(z);
+    free(mutex_readcount);
+    destroy(&db_reader);
+    destroy(&db_writer);
     return 0;
 }

@@ -17,10 +17,15 @@ test:
 	./experiments.sh > temp/output.csv
 	python3 GraphMaker.py
 
-testMemory:
+testMem:
 	make
 	valgrind --log-file="logs/Philosof_valgrind.log" --leak-check=yes temp/Philosof 2
-	cppcheck --enable=all --inconclusive --output-file="logs/CppCheck_Producer_Consumer_AC.txt" src/Producer_Consumer_AC.c
+	valgrind --log-file="logs/Philosof_AC_valgrind.log" --leak-check=yes temp/Philosof_AC 2
+	valgrind --log-file="logs/WriterReader_valgrind.log" --leak-check=yes temp/WriterReader 2 2
+	valgrind --log-file="logs/WriterReader_AC_valgrind.log" --leak-check=yes temp/WriterReader_AC 2 2
+	valgrind --log-file="logs/test_and_set_valgrind.log" --leak-check=yes temp/Perftest 2
+	valgrind --log-file="logs/test_and_test_and_set_valgrind.log" --leak-check=yes temp/Perftest2 2
+	valgrind --log-file="logs/Producer_Consumer_valgrind.log" --leak-check=yes temp/Producer_Consumer 2 2
 zip:
 	make clean
 	zip -r ../Projet.zip . -x "*.git*"

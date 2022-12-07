@@ -108,8 +108,14 @@ int main(int argc, char const *argv[])
             printf("ERROR: Error while joining producter thread n°%ld\n",i);
         }
     }
-    //printf("%d items producted\n",nprod);
-    while(nprod2 > 0);
-    //printf("%d items consumed\n",8192-nprod2);
+    for (size_t i = 0; i < nconsom; i++)
+    {
+        if(0 != pthread_join(ConsThreads[i],NULL)){
+            printf("ERROR: Error while joining consumer thread n°%ld\n",i);
+        }
+    }
+    pthread_mutex_destroy(&mutex);
+    sem_destroy(&empty);
+    sem_destroy(&full);
     return 0;
 }

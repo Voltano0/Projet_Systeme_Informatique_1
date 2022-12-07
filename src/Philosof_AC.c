@@ -53,5 +53,6 @@ int main ( int argc, char *argv[]){
   for (int i = 0; i < numberOfPhilo; i++){
     if(pthread_join(phil[i], NULL)!=0)return 1;
   }
+  free(baguette);
   return 0;
 }
