@@ -7,6 +7,11 @@
 int numberOfPhilo;
 pthread_mutex_t *baguette;
 
+/**
+ * philosophe that eat and think for 100000 times
+ * @param arg number of the philosophe
+ * 
+*/
 void* philosophe (void* arg){
   int * idl = (int*) arg;
   int left = *idl;
