@@ -22,13 +22,17 @@ for prog in df['Program'].unique():
         meanTimes = meanTimes[:len(meanTimes)-1]
         stdTimes = stdTimes[:len(stdTimes)-1]
         rawTimes = rawTimes[:len(rawTimes)-1]
+    if(prog=="Philosof"):
+        prog = "Philosophe"
+    if(prog=="Philosof_AC"):
+        prog = "Philosophe_AC"
     plt.boxplot(rawTimes, labels=nThreads,showmeans=True)
     #plt.errorbar(nThreads, meanTimes, yerr=stdTimes, fmt='o')
     plt.ylim(ymin=0)
     plt.xlabel('Number of threads')
     plt.ylabel('Time (s)')
     plt.title(prog)
-    plt.savefig(f'temp/{prog}.png')
+    plt.savefig(f'temp/{prog}.pdf')
     
 plt.clf()
 for i in range(0,df['Program'].unique().size,2):
@@ -55,6 +59,9 @@ for i in range(0,df['Program'].unique().size,2):
         stdTimes1 = stdTimes1[:len(stdTimes1)-1]
         stdTimes2 = stdTimes2[:len(stdTimes2)-1]
         nThreads = nThreads[1:len(nThreads)]
+    if(list[i]=="Philosof"):
+        list[i] = "Philosophe"
+        list[i+1] = "Philosophe_AC"
     plt.errorbar(nThreads, meanTimes1, yerr=stdTimes1, label=list[i])
     plt.errorbar(nThreads, meanTimes2, yerr=stdTimes2, label=list[i+1])
     plt.ylim(ymin=0)
@@ -63,5 +70,5 @@ for i in range(0,df['Program'].unique().size,2):
     plt.ylabel('Time (s)')
     plt.title(f"{list[i]} and {list[i+1]}")
     plt.legend()
-    plt.savefig(f'temp/{list[i]}-{list[i+1]}.png')
+    plt.savefig(f'temp/{list[i]}-{list[i+1]}.pdf')
 plt.clf()
