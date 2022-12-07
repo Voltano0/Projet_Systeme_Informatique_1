@@ -54,8 +54,6 @@ for i in range(0,df['Program'].unique().size,2):
         StdTimes1 = StdTimes1[:len(StdTimes1)-1]
         StdTimes2 = StdTimes2[:len(StdTimes2)-1]
         Nthreads = Nthreads[1:len(Nthreads)]
-    print(f"{list[i]} = {MeanTimes1}")
-    print(f"{list[i+1]} = {MeanTimes2}")
     plt.errorbar(Nthreads, MeanTimes1, yerr=StdTimes1, label=list[i])
     plt.errorbar(Nthreads, MeanTimes2, yerr=StdTimes2, label=list[i+1])
     plt.ylim(ymin=0)
