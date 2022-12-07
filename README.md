@@ -5,5 +5,8 @@ WriterReader and ProducerConsumer. After that, we had to implement test-and-set 
 Create a custom semaphore with those spinlock and rewrite the 3 algorithms with the custom semaphore.
 ## Structure of the code
 - `headers/`
-## How to run the code. 
-make : 
+## How to run the code.
+ 
+```bash
+$ make : 
+```
