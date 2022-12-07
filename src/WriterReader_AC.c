@@ -5,9 +5,9 @@
 #include"../headers/semative.h"
 
 
-int* mutex_reader;
-int* mutex_writer;
-int* z;// Pour être sure que les writer aient tjrs la prioritée
+int mutex_reader;
+int mutex_writer;
+int z;// Pour être sure que les writer aient tjrs la prioritée
 custom_sema_t db_reader; // accès à la db
 custom_sema_t db_writer; // accès à la db
 int writercount = 0;
@@ -26,12 +26,12 @@ void* writer(){
     int run = 1;
 while(run)
     {
-    lock(mutex_writer);
+    lock(&mutex_writer);
     writercount ++;
     if(writercount == 1){
         wait(&db_reader);
     }
-    unlock(mutex_writer);
+    unlock(&mutex_writer);
     
     wait(&db_writer);
 
@@ -45,12 +45,12 @@ while(run)
     }
     post(&db_writer);
 
-    lock(mutex_writer);
+    lock(&mutex_writer);
     writercount --;
     if(writercount == 0){
         post(&db_reader);
     }
-    unlock(mutex_writer);
+    unlock(&mutex_writer);
     }
 }
 
@@ -59,18 +59,18 @@ void* reader()
     int run = 1;
     while(run)
     {
-        lock(z);
+        lock(&z);
         wait(&db_reader);
-        lock(mutex_reader);
+        lock(&mutex_reader);
         // section critique
         readcount++;
         if (readcount==1)
         { // arrivée du premier reader
             wait(&db_writer);
         }
-        unlock(mutex_reader);
+        unlock(&mutex_reader);
         post(&db_reader);
-        lock(mutex_reader);
+        lock(&mutex_reader);
         if(reading < 640){
             read_database();
             reading ++;
@@ -83,8 +83,8 @@ void* reader()
         else{
             run = 0;
         }
-        unlock(mutex_reader);
-        unlock(z);
+        unlock(&mutex_reader);
+        unlock(&z);
         }
 }
 
@@ -95,12 +95,6 @@ int main(int argc, char const *argv[]){
     sscanf(argv[1], "%d", &nwriter);
     init(&db_reader,1);
     init(&db_writer,1);
-    mutex_reader = malloc(sizeof(int));
-    mutex_writer = malloc(sizeof(int));
-    z = malloc(sizeof(int));
-    *mutex_reader = 0;
-    *mutex_writer = 0;
-    *z = 0;
     pthread_t ReadThreads[nreader];
     pthread_t WriteThreads[nwriter];
     for (size_t i = 0; i < nwriter; i++)

@@ -9,6 +9,7 @@
 
 
 void init(custom_sema_t *custom_sem, int value){
+    
     custom_sem -> locker = (int *) malloc(sizeof(int));
     *(custom_sem -> locker) = 0;
     custom_sem -> value = value;

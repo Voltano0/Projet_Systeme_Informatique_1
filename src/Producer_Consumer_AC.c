@@ -3,7 +3,6 @@
 #include<unistd.h>
 #include<stdbool.h>
 #include"../headers/semative.h"
-
 #define N 8 // places dans le buffer
 int buffer[N];
 int* mutex;
