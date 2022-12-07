@@ -8,9 +8,7 @@ int numberOfOccur;
 
 void* sectionCrit(void* arg){
     int * locker = (int*)arg;
-    for(int i = 0; i < numberOfOccur; i++)
-    {
-        
+    for(int i = 0; i < numberOfOccur; i++){
         lock(locker);
         for (int i=0; i<10000; i++);
         unlock(locker);

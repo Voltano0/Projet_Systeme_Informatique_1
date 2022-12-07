@@ -38,8 +38,7 @@ int main ( int argc, char *argv[]){
   //create 2 baguettes if there is only one philo
   if (numberOfPhilo == 1){
     baguette = (int *) malloc((numberOfPhilo+1) * sizeof(int));
-  }
-  else{
+  }else{
     baguette = (int *) malloc(numberOfPhilo * sizeof(int));
   }
 

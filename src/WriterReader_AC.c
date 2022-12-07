@@ -5,14 +5,16 @@
 #include"../headers/semative.h"
 
 
-int* mutex_reader;
-int* mutex_writer;
+int* mutexReader;
+int* mutexWriter;
 int* z;// Pour être sure que les writer aient tjrs la prioritée
-int* mutex_readcount;
-custom_sema_t db_reader; // accès à la db
-custom_sema_t db_writer; // accès à la db
-int writercount = 0;
-int readcount=0; // nombre de readers
+int* mutexReadCount;
+
+custom_sema_t dbReader; // accès à la db
+custom_sema_t dbWriter; // accès à la db
+
+int writerCount = 0;
+int readCount=0; // nombre de readers
 int reading = 0;
 int writing = 0;
 
@@ -26,129 +28,104 @@ void read_database(){
 //implement writer from reader writer problem
 void* writer(){
     int run = 1;
-while(run)
-    {
-    lock(mutex_writer);
-    writercount ++;
-    if(writercount == 1){
-        wait(&db_reader);
-    }
-    unlock(mutex_writer);
-    wait(&db_writer);
-    // section critique, un seul writer à la fois
-    if(writing < 2560){
-        writing ++;
-        write_database();
-    }
-    else{
-        run = 0;
-    }
-    post(&db_writer);
+    while(run){
+        lock(mutexWriter);
+        writerCount ++;
+        if(writerCount == 1)wait(&dbReader);
+        unlock(mutexWriter);
+        wait(&dbWriter);
+        // section critique, un seul writer à la fois
+        if(writing < 2560){
+            writing ++;
+            write_database();
+        }else{run = 0;}
 
-    lock(mutex_writer);
-    writercount --;
-    if(writercount == 0){
-        post(&db_reader);
-    }
-    unlock(mutex_writer);
+        post(&dbWriter);
+        lock(mutexWriter);
+        writerCount --;
+        if(writerCount == 0)post(&dbReader);
+        unlock(mutexWriter);
     }
 }
 
-void* reader()
-{
+void* reader(){
     int run = 1;
-    while(run)
-    {
+    while(run){
         lock(z);
-        wait(&db_reader);
-        lock(mutex_reader);
+        wait(&dbReader);
+        lock(mutexReader);
         // section critique
-        readcount++;
-        if (readcount==1)
-        { // arrivée du premier reader
-            wait(&db_writer);
+        readCount++;
+        if (readCount==1){ 
+            wait(&dbWriter); // arrivée du premier reader
         }
-        unlock(mutex_reader);
-        post(&db_reader);
+        unlock(mutexReader);
+        post(&dbReader);
         unlock(z);
-        lock(mutex_readcount);
+        lock(mutexReadCount);
         if(reading < 2560){
             reading ++;
-            unlock(mutex_readcount);
+            unlock(mutexReadCount);
             read_database();
-            lock(mutex_reader);
-            readcount--;
-            if(readcount==0)
-            { // départ du dernier reader
-                post(&db_writer);
+            lock(mutexReader);
+            readCount--;
+            if(readCount==0){
+                post(&dbWriter); // départ du dernier reader
             }
         }
         else{
-            lock(mutex_reader);
-            readcount--;
-            if(readcount==0)
-            { // départ du dernier reader
-                post(&db_writer);
+            lock(mutexReader);
+            readCount--;
+            if(readCount==0){ 
+                post(&dbWriter);// départ du dernier reader
             }
             run = 0;
-            unlock(mutex_readcount);
+            unlock(mutexReadCount);
         }
-        unlock(mutex_reader);
-        }
+        unlock(mutexReader);
+    }
 }
 
 int main(int argc, char const *argv[]){
     int nreader;
     int nwriter;
+
     sscanf(argv[2], "%d", &nreader);
     sscanf(argv[1], "%d", &nwriter);
-    init(&db_reader,1);
-    init(&db_writer,1);
-    mutex_reader = malloc(sizeof(int));
-    mutex_writer = malloc(sizeof(int));
+
+    init(&dbReader,1);
+    init(&dbWriter,1);
+
+    mutexReader = malloc(sizeof(int));
+    mutexWriter = malloc(sizeof(int));
     z = malloc(sizeof(int));
-    mutex_readcount = malloc(sizeof(int));
-    *mutex_reader = 0;
-    *mutex_writer = 0;
+    mutexReadCount = malloc(sizeof(int));
+    *mutexReader = 0;
+    *mutexWriter = 0;
     *z = 0;
-    *mutex_readcount = 0;
+    *mutexReadCount = 0;
+
     pthread_t ReadThreads[nreader];
     pthread_t WriteThreads[nwriter];
-    for (size_t i = 0; i < nwriter; i++)
-    {
-        if(0 != pthread_create(&WriteThreads[i],NULL,&writer,NULL)){
-            printf("ERROR: Error while creating writer thread n°%ld\n",i);
-        }
-        //else printf("Writer Thread %ld created\n",i+1);
-    }
 
-    for (size_t i = 0; i < nreader; i++)
-    {
-        if(0 != pthread_create(&ReadThreads[i],NULL,&reader,NULL)){
-            printf("ERROR: Error while creating Reader thread n°%ld",i);
-        }
-        //else printf("Reader Thread %ld created\n",i+1);
+    for (size_t i = 0; i < nwriter; i++){
+        if(pthread_create(&WriteThreads[i],NULL,&writer,NULL) != 0)return 1;
     }
-    
-    for (size_t i = 0; i < nwriter; i++)
-    {
-        if(0 != pthread_join(WriteThreads[i],NULL)){
-            printf("ERROR: Error while joining writer thread n°%ld\n",i);
-        }
+    for (size_t i = 0; i < nreader; i++){
+        if(pthread_create(&ReadThreads[i],NULL,&reader,NULL)!=0)return 1;
     }
-    for (size_t i = 0; i < nreader; i++)
-    {
-        if(0 != pthread_join(ReadThreads[i],NULL)){
-            printf("ERROR: Error while joining reader thread n°%ld\n",i);
-        }
+    for (size_t i = 0; i < nwriter; i++){
+        if(pthread_join(WriteThreads[i],NULL)!= 0)return 1;
     }
-    //printf("%d writing\n",writing);
-    //printf("%d reading\n",reading);
-    free(mutex_reader);
-    free(mutex_writer);
+    for (size_t i = 0; i < nreader; i++){
+        if(pthread_join(ReadThreads[i],NULL) != 0)return 1;
+    }
+    free(mutexReader);
+    free(mutexWriter);
     free(z);
-    free(mutex_readcount);
-    destroy(&db_reader);
-    destroy(&db_writer);
+    free(mutexReadCount);
+    destroy(&dbReader);
+    destroy(&dbWriter);
+
     return 0;
 }
