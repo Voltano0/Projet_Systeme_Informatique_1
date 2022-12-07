@@ -5,7 +5,7 @@
 #include <malloc.h>
 #include <unistd.h>
 #include "custom_sema_t.h"
-#include "Lock.h"
+#include "Lock2.h"
 
 /**
  * initialize the value of the semaphore

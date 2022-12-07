@@ -18,14 +18,23 @@ int readCount=0; // nombre de readers
 int reading = 0;
 int writing = 0;
 
+/**
+ * Fake action to simulate write in database
+*/
 void write_database(){
     for (int i=0; i<10000; i++);
 }
+/**
+ * Fake action to simulate read in database
+*/
 void read_database(){
     for (int i=0; i<10000; i++);
 }
 
-//implement writer from reader writer problem
+/**
+ * Implement writer from reader writer problem
+ * 
+*/
 void* writer(){
     int run = 1;
     while(run){
@@ -47,7 +56,10 @@ void* writer(){
         unlock(mutexWriter);
     }
 }
-
+/**
+ * Implement reader from reader writer problem
+ * 
+*/
 void* reader(){
     int run = 1;
     while(run){

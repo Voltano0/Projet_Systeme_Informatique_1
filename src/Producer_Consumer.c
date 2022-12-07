@@ -14,6 +14,11 @@ int head = 0;
 int nProd = 0;
 int nProd2 = 8192;
 
+/**
+ * Insert item in the buffer
+ * @param item
+ * 
+*/
 void ins(int item){
     if (head < 8){
         buffer[head] = item;
@@ -22,6 +27,10 @@ void ins(int item){
     }
     head++;
 }
+/**
+ * Remove item from the buffer
+ * @return item
+*/
 int rem(){
     if (head > 0){
         head--;
@@ -30,8 +39,10 @@ int rem(){
         printf("ERROR: Insert when Buffer was already empty");
     }
 }
-
-// Producteur
+/**
+ * Produce item and insert it in the buffer
+ * 
+*/
 void* producer(){
   int item = 1;
   for (int i=0; i<10000; i++);
@@ -47,8 +58,10 @@ void* producer(){
     sem_post(&full); // il y a une place remplie en plus
     }
 }
-
-// Consommateur
+/**
+ * Remove item from the buffer and consume it
+ * 
+*/
 void* consumer(){   
     int item;
     bool run = true;

@@ -7,6 +7,11 @@
 
 int numberOfOccur; 
 
+/**
+ * Test lock and unlock with a 10000 for loop
+ * @param arg initial value of the lock
+ * 
+*/
 void* sectionCrit(void* arg){
     int * locker = (int*)arg;
     for(int i = 0; i < numberOfOccur; i++){
