@@ -5,7 +5,7 @@
 #include <malloc.h>
 #include <unistd.h>
 #include "custom_sema_t.h"
-#include "Lock2.h"
+#include "Lock.h"
 
 
 void init(custom_sema_t *custom_sem, int value){
