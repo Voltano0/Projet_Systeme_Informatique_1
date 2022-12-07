@@ -28,7 +28,7 @@ testMem:
 	valgrind --log-file="logs/Producer_Consumer_valgrind.log" --leak-check=yes temp/Producer_Consumer 2 2
 zip:
 	make clean
-	zip -r ../Projet.zip . -x "*.git*"
+	zip -r ../Projet.zip . -x "*.git*" "*.vscode*"
 
 # a .PHONY target forces make to execute the command even if the target already exists
 # $(CC) -o  TestSystemC tests/TestSystemC.c -lcunit
