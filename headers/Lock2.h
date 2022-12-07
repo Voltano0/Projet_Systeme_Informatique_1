@@ -1,3 +1,8 @@
+/**
+ * Switch the value of locker with 1
+ * @param locker variable set to 0 or 1
+ *  
+*/
 void lock(int* locker){
     while(*locker == 1){};
     __asm(
@@ -11,7 +16,11 @@ void lock(int* locker){
         : "eax"
         );
 };
-
+/**
+ * Switch the value of locker with 0
+ * @param locker variable set to 0 or 1
+ *  
+*/
 void unlock(int* locker){
     __asm(
         "movl $0, %0 ;"
