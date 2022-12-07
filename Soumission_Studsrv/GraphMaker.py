@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Read the data
-df = pd.read_csv('temp/output.csv',sep=";")
+df = pd.read_csv('output.csv',sep=";")
 tottime = df['Temps'].sum()
 print(f"Temps Total = {tottime} s")
 #plot the data for Producer_Consumer
@@ -17,11 +17,14 @@ for prog in df['Program'].unique():
         MeanTimes.append(newdf[newdf['Threads'] == i]['Temps'].mean())
         StdTimes.append(newdf[newdf['Threads'] == i]['Temps'].std())
     plt.clf()
-    if(prog == "Producer_Consumer" or prog == "WriterReader" or prog == "Producer_Consumer_AC" or prog == "WriterReader_AC"):
-        Nthreads = Nthreads[1:len(Nthreads)]
+    if(list[i] == "Producer_Consumer" or list[i] == "Writer_Reader"):
         MeanTimes = MeanTimes[:len(MeanTimes)-1]
         StdTimes = StdTimes[:len(StdTimes)-1]
         RawTimes = RawTimes[:len(RawTimes)-1]
+        MeanTimes.insert(1,MeanTimes[0])
+        StdTimes.insert(1,StdTimes[0])
+        RawTimes.insert(1,RawTimes[0])
+
     plt.boxplot(RawTimes, labels=Nthreads,showmeans=True)
     #plt.errorbar(Nthreads, MeanTimes, yerr=StdTimes, fmt='o')
     plt.ylim(ymin=0)
@@ -54,8 +57,6 @@ for i in range(0,df['Program'].unique().size,2):
         StdTimes1 = StdTimes1[:len(StdTimes1)-1]
         StdTimes2 = StdTimes2[:len(StdTimes2)-1]
         Nthreads = Nthreads[1:len(Nthreads)]
-    print(f"{list[i]} = {MeanTimes1}")
-    print(f"{list[i+1]} = {MeanTimes2}")
     plt.errorbar(Nthreads, MeanTimes1, yerr=StdTimes1, label=list[i])
     plt.errorbar(Nthreads, MeanTimes2, yerr=StdTimes2, label=list[i+1])
     plt.ylim(ymin=0)

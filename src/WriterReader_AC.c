@@ -8,6 +8,7 @@
 int* mutex_reader;
 int* mutex_writer;
 int* z;// Pour être sure que les writer aient tjrs la prioritée
+int* mutex_readcount;
 custom_sema_t db_reader; // accès à la db
 custom_sema_t db_writer; // accès à la db
 int writercount = 0;
@@ -69,22 +70,30 @@ void* reader()
         }
         unlock(mutex_reader);
         post(&db_reader);
-        lock(mutex_reader);
-        if(reading < 640){
-            read_database();
+        unlock(z);
+        lock(mutex_readcount);
+        if(reading < 2560){
             reading ++;
+            unlock(mutex_readcount);
+            read_database();
+            lock(mutex_reader);
             readcount--;
             if(readcount==0)
             { // départ du dernier reader
                 post(&db_writer);
-                post(&db_writer);
             }
         }
         else{
+            lock(mutex_reader);
+            readcount--;
+            if(readcount==0)
+            { // départ du dernier reader
+                post(&db_writer);
+            }
             run = 0;
+            unlock(mutex_readcount);
         }
         unlock(mutex_reader);
-        unlock(z);
         }
 }
 
@@ -98,9 +107,11 @@ int main(int argc, char const *argv[]){
     mutex_reader = malloc(sizeof(int));
     mutex_writer = malloc(sizeof(int));
     z = malloc(sizeof(int));
+    mutex_readcount = malloc(sizeof(int));
     *mutex_reader = 0;
     *mutex_writer = 0;
     *z = 0;
+    *mutex_readcount = 0;
     pthread_t ReadThreads[nreader];
     pthread_t WriteThreads[nwriter];
     for (size_t i = 0; i < nwriter; i++)

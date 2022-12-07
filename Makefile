@@ -21,6 +21,9 @@ testMemory:
 	make
 	valgrind --log-file="logs/Philosof_valgrind.log" --leak-check=yes temp/Philosof 2
 	cppcheck --enable=all --inconclusive --output-file="logs/CppCheck_Producer_Consumer_AC.txt" src/Producer_Consumer_AC.c
+zip:
+	make clean
+	zip -r ../Projet.zip . -x "*.git*"
 
 # a .PHONY target forces make to execute the command even if the target already exists
 # $(CC) -o  TestSystemC tests/TestSystemC.c -lcunit
